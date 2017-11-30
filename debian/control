@@ -1,0 +1,23 @@
+Source: eta-check-optictouch
+Section: utils
+Priority: optional
+Maintainer: Yunusemre Şentürk <yunusemre.senturk@pardus.org.tr>
+Build-Depends: debhelper (>= 9), 
+    libc6,
+    libgcc1,
+    libgl1-mesa-glx | libgl1,
+    libqt5core5a,
+    libqt5gui5,
+    libqt5qml5,
+    libqt5quick5,
+    libqt5widgets5,
+    libstdc++6,
+Standards-Version: 3.9.6
+Homepage: http://pardus.org.tr
+
+Package: eta-check-optictouch
+Architecture: amd64
+Depends: ${shlibs:Depends}, ${misc:Depends}, qml-module-qtquick-controls, qml-module-qtquick-window2, qml-module-qtquick2
+Description: ETAP Dokunmatik Sürücü Kontrolcüsü
+ Faz 1 tahtalarda yer alan driverın geç gelmesinin tespit
+ ihtiyacı üzerine geliştirilmiş bir araç.
