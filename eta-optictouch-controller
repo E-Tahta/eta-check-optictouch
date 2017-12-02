@@ -8,17 +8,24 @@ YEL='\033[1;33m'
 GREEN='\033[0;32m'
 NC='\033[0m' # No Color
 
+echo -e "${RED}$0" >> $LOG_FILE
+u=`/usr/bin/whoami`
+echo -e "${RED}$0${NC} : running as ${YEL}$u" >> $LOG_FILE
+
 LOG_FILE=/var/eta.log
 OPTICTOUCH_PID=/tmp/optictouch.pid
 
 if [ -f $LOG_FILE ]; then
+    echo -e "${RED}$0${NC} : creating log file ${YEL}$LOG_FILE" >> $LOG_FILE
     touch $LOG_FILE
     chmod 666 $LOG_FILE
 fi
 
-echo -e "${RED}$0" >> $LOG_FILE
-u=`/usr/bin/whoami`
-echo -e "${RED}$0${NC} : running as ${YEL}$u" >> $LOG_FILE
+if [ -f $OPTICTOUCH_PID ];then
+    removed=`rm -rvf $OPTICTOUCH_PID
+    echo -e "${RED}$0${NC} : ${YEL}$removed" >> $LOG_FILE
+fi
+
 
 START=0
 SUCCESS=0
@@ -47,7 +54,7 @@ do
          fi
 
     elif contains "$line" "optictouch_probe success!"; then
-         echo -e "${RED}$0${NC} : ODT id=0xc20 tag detected SUCCESS=1" >> $LOG_FILE
+         echo -e "${RED}$0${NC} : optictouch_probe sccuess tag detected SUCCESS=1" >> $LOG_FILE
          SUCCESS=1
     elif contains "$line" "optictouch:"; then
         if contains "$line" "ODT:"; then
@@ -56,7 +63,7 @@ do
             START=0
             SUCCESS=0
             removed=`rm -rvf $OPTICTOUCH_PID
-            echo -e "${RED}$0 ${NC}: ${YEL}$removed" >> $LOG_FILE
+            echo -e "${RED}$0${NC} : ${YEL}$removed" >> $LOG_FILE
         fi
     fi
 
