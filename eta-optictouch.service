@@ -1,0 +1,9 @@
+[Unit]
+Description=Vestel IWB optictouch handler
+Before=kdm.service
+
+[Service]
+User=root
+ExecStart=/usr/bin/eta-optictouch-handler /var/log/kern.log
+Restart=always
+
