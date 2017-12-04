@@ -1,3 +1,28 @@
+eta-check-optictouch (0.1.1) unstable; urgency=medium
+
+  [ Yunusemre Şentürk ]
+  * Add the bash script that will be used by check-optichtouch service
+  * Adjust some syntax in main script
+  * Rename the base script as eta-optictouch-handler
+  * Add systemd unit file using main script
+  * Update main script to make sure it runs in only Vestel IWB that requires optictouch driver
+  * Update main script and service file after test on PHASE 1 IWB
+  * Remove old script
+  * Update .pro file for installing into correct paths
+
+  [ Hikmet Baş ]
+  * Change appearance
+  * Add desktop file for autostart and add wrapper.
+
+  [ Yunusemre Şentürk ]
+  * Rename service file and update pro file
+  * Update rules file for systemd purposes
+  * Update control file add dh-systemd to build-depends
+  * Update pro file for service
+  * Add postinst and prerm scripts to be able to control service file
+
+ -- Yunusemre Şentürk <yunusemre.senturk@pardus.org.tr>  Mon, 04 Dec 2017 15:11:39 +0300
+
 eta-check-optictouch (0.1.0) unstable; urgency=medium
 
   * Initial release.
