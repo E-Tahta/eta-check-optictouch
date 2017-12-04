@@ -12,13 +12,14 @@ HEADERS += \
 
 RESOURCES += qml.qrc
 
-script.files = eta-optictouch-handler
-script.path = /usr/bin/
-
-service.files = eta-optictouch.service
-service.path = /lib/systemd/system/
-
 target.path = /usr/bin/
 
-INSTALLS += target script
+script.files = eta-optictouch-handler eta-optictouch-busy-wrapper
+script.path = /usr/bin/
+
+autostart_file.files = eta-check-optictouch.desktop
+autostart_file.commands = mkdir -p /etc/xdg/autostart
+autostart_file.path = /etc/xdg/autostart/
+
+INSTALLS += target script autostart_file
 
