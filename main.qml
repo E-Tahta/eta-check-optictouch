@@ -27,8 +27,8 @@ ApplicationWindow {
     id: appwin
     flags: Qt.FramelessWindowHint | Qt.X11BypassWindowManagerHint
     visible: true
-    width: Screen.width
-    minimumWidth: Screen.width
+    width: Screen.width * 14/100
+    minimumWidth: Screen.width * 14/100
     height: Screen.height
     minimumHeight: Screen.height
     opacity: 1
@@ -75,19 +75,23 @@ ApplicationWindow {
                 topMargin: 50
             }
             color: "#ffffff"
-            text: qsTr("Dokunmatik Sürücüsü Bekleniyor")
+            text: qsTr("Dokunmatik\nSürücüsü\nBekleniyor")
             font.family: "OpenSymbol"
             font.bold: true
             horizontalAlignment: Text.AlignHCenter
-            font.pointSize: 28
+            font.pointSize: 14
 
         }        
 
         Item {
             id:busyIndicator
-            width: Screen.width / 10
+            width: appwin.width / 2
             height: busyIndicator.width
-            anchors.centerIn: parent
+            anchors {
+                horizontalCenter: parent.horizontalCenter
+                verticalCenter: parent.verticalCenter
+                verticalCenterOffset: -appwin.width/2
+            }
 
             antialiasing: true
             smooth: true
