@@ -21,5 +21,8 @@ autostart_file.files = eta-check-optictouch.desktop
 autostart_file.commands = mkdir -p /etc/xdg/autostart
 autostart_file.path = /etc/xdg/autostart/
 
-INSTALLS += target script autostart_file
+service.files = eta-check-optictouch.service
+service.path = /lib/systemd/system/
+
+INSTALLS += target script autostart_file service
 
