@@ -8,33 +8,33 @@ YEL='\033[1;33m'
 GREEN='\033[0;32m'
 NC='\033[0m' # No Color
 
-LOG_FILE=/var/eta.log
-OPTICTOUCH_PID=/tmp/optictouch.pid
+LOG_FILE=/var/log/eta.log
+OPTICTOUCH_PID=/var/run/optictouch.pid
 START=0
 SUCCESS=0
 FAIL=0
 
-echo -e "${RED}$0" >> $LOG_FILE
-u=`/usr/bin/whoami`
-echo -e "${RED}$0${NC} : running as ${YEL}$u" >> $LOG_FILE
-
 if [ ! -f $LOG_FILE ]; then
-    echo -e "${RED}$0${NC} : creating log file ${YEL}$LOG_FILE" >> $LOG_FILE
     touch $LOG_FILE
     chmod 666 $LOG_FILE
+    echo -e "${RED}$0${NC} : creating log file ${YEL}$LOG_FILE" >> $LOG_FILE
 fi
+
+echo -e "${RED}$0" >> $LOG_FILE
+u=$(/usr/bin/whoami)
+echo -e "${RED}$0${NC} : running as ${YEL}$u" >> $LOG_FILE
 
 remove_pid() {
     if [ -f $OPTICTOUCH_PID ];then
-        removed=`rm -rvf $OPTICTOUCH_PID`
+        removed=$(rm -rvf $OPTICTOUCH_PID)
         echo -e "${RED}$0${NC} : ${YEL}$removed" >> $LOG_FILE
     fi
 }
 
 create_pid() {
-    echo -e "${RED}$0${NC} : creating optictouch.pid" >> $LOG_FILE
+    echo -e "${RED}$0${NC} : creating ${YEL}$OPTICTOUCH_PID" >> $LOG_FILE
     touch $OPTICTOUCH_PID
-    chmod 777 $OPTICTOUCH_PID
+    chmod 644 $OPTICTOUCH_PID
 }
 
 contains() {
@@ -52,17 +52,17 @@ handler_loop() {
     do
         if contains "$line" "input:"; then
             if contains "$line" "Optical TouchScreen"; then
-                echo -e "${RED}$0${NC} : input tag detected START=1 FAIL=0 SUCCESS=0" >> $LOG_FILE
+                echo -e "${RED}$0${NC} : input tag detected START = ${YEL}1${NC} FAIL = ${YEL}0${NC} SUCCESS = ${YEL}0${NC}" >> $LOG_FILE
                 START=1
                 FAIL=0
                 SUCCESS=0
             fi
         elif contains "$line" "optictouch_probe success!"; then
-            echo -e "${RED}$0${NC} : optictouch_probe sccuess tag detected SUCCESS=1" >> $LOG_FILE
+            echo -e "${RED}$0${NC} : optictouch_probe success tag detected SUCCESS = ${YEL}1${NC}" >> $LOG_FILE
             SUCCESS=1
         elif contains "$line" "optictouch:"; then
             if contains "$line" "ODT:"; then
-                echo -e "${RED}$0${NC} : optictouch tag detected START=0 FAIL=1 SUCCESS=0" >> $LOG_FILE
+                echo -e "${RED}$0${NC} : optictouch tag detected START = ${YEL}0${NC} FAIL = ${YEL}1${NC} SUCCESS = ${YEL}0${NC}" >> $LOG_FILE
                 FAIL=1
                 START=0
                 SUCCESS=0
@@ -72,21 +72,21 @@ handler_loop() {
 
         if [ "$SUCCESS" -eq 1 ] && [ "$FAIL" -ne 1 ]; then
             if [ "$START" -eq 1 ]; then
-                echo -e "${RED}$0${NC} : everything is ok" >> $LOG_FILE
+                echo -e "${RED}$0${NC} : everything is ${GREEN}OK." >> $LOG_FILE
                 SUCCESS=0
                 FAIL=0
                 START=0
                 create_pid
             fi
         fi
-    done < <(tail -1f $1)
+    done < <(tail -100f /var/log/kern.log)
 }
 
 if lsusb | grep -qE "(2621:2201|2621:4501)" ; then
-    echo -e "${RED}$0${NC} : The IWB is ${GREEN}PHASE 2" >> /tmp/eta_log
+    echo -e "${RED}$0${NC} : The IWB is ${GREEN}PHASE 2" >> $LOG_FILE
     handler_loop
 elif lsusb | grep -qE "(6615:0084|6615:0085|6615:0086|6615:0087|6615:0088|6615:0c20)" ; then
-    echo -e "${RED}$0${NC} : The IWB is ${GREEN}PHASE 1" >> /tmp/eta_log
+    echo -e "${RED}$0${NC} : The IWB is ${GREEN}PHASE 1" >> $LOG_FILE
     handler_loop
 else
     create_pid
