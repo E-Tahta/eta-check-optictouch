@@ -12,8 +12,11 @@ HEADERS += \
 
 RESOURCES += qml.qrc
 
-script.files = check_optictouch
+script.files = eta-optictouch-handler
 script.path = /usr/bin/
+
+service.files = eta-optictouch.service
+service.path = /lib/systemd/system/
 
 target.path = /usr/bin/
 
