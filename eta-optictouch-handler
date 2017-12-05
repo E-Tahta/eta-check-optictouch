@@ -88,6 +88,7 @@ handler_loop_p2() {
         if contains "$line" "input:"; then
             if contains "$line" "Touchscreen"; then
                 echo -e "${RED}$0${NC} : Touchscreen detected in input tag" >> $LOG_FILE
+                sleep 2
                 create_pid
             fi
         elif contains "$line" "optictouch:"; then
