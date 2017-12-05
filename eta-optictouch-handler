@@ -47,7 +47,7 @@ contains() {
     fi
 }
 
-handler_loop() {
+handler_loop_p1() {
     while read line
     do
         if contains "$line" "input:"; then
@@ -82,12 +82,30 @@ handler_loop() {
     done < <(tail -100f /var/log/kern.log)
 }
 
+handler_loop_p2() {
+    while read line
+    do
+        if contains "$line" "input:"; then
+            if contains "$line" "Touchscreen"; then
+                echo -e "${RED}$0${NC} : Touchscreen detected in input tag" >> $LOG_FILE
+                create_pid
+            fi
+        elif contains "$line" "optictouch:"; then
+            if contains "$line" "fail"; then
+                echo -e "${RED}$0${NC} : fail detected in optictouch tag" >> $LOG_FILE
+                remove_pid
+            fi
+        fi
+    done < <(tail -100f /var/log/kern.log)
+}
+
+
 if lsusb | grep -qE "(2621:2201|2621:4501)" ; then
     echo -e "${RED}$0${NC} : The IWB is ${GREEN}PHASE 2" >> $LOG_FILE
-    handler_loop
+    handler_loop_p2
 elif lsusb | grep -qE "(6615:0084|6615:0085|6615:0086|6615:0087|6615:0088|6615:0c20)" ; then
     echo -e "${RED}$0${NC} : The IWB is ${GREEN}PHASE 1" >> $LOG_FILE
-    handler_loop
+    handler_loop_p1
 else
     create_pid
 fi
