@@ -14,6 +14,8 @@ START=0
 SUCCESS=0
 FAIL=0
 
+AMD_USB_SOCKET=''
+
 if [ ! -f $LOG_FILE ]; then
     touch $LOG_FILE
     chmod 666 $LOG_FILE
@@ -82,7 +84,7 @@ handler_loop_p1() {
     done < <(tail -100f /var/log/kern.log)
 }
 
-handler_loop_p2() {
+handler_loop_p2_intel() {
     while read line
     do
         if contains "$line" "input:"; then
@@ -100,10 +102,50 @@ handler_loop_p2() {
     done < <(tail -100f /var/log/kern.log)
 }
 
+handler_loop_p2_amd() {
+    while read line
+    do
+        if contains "$line" "input:"; then
+            if contains "$line" "Touchscreen"; then
+                echo -e "${RED}$0${NC} : Touchscreen detected in input tag" >> $LOG_FILE
+                last_column=$(echo "$line" | awk '{print $NF}')
+
+                OIFS="$IFS"
+                IFS='/'
+                read -a arr <<< "${last_column}"
+                IFS="$OIFS"
+
+                arraylength=${#arr[@]}
+
+                for (( i=0; i<${arraylength}; i++ )); do
+                    if contains "${arr[${i}]}" "usb"; then
+                    AMD_USB_SOCKET="${arr[${i}+1]}"
+                    fi
+                done
+
+                sleep 2
+                create_pid
+            fi
+        elif contains "$line" "usb ${AMD_USB_SOCKET}"; then
+            if contains "$line" "USB disconnect"; then
+                echo -e "${RED}$0${NC} : USB disconnect  detected in optictouch tag" >> $LOG_FILE
+                remove_pid
+            fi
+        fi
+    done < <(tail -100f /var/log/kern.log)
+}
+
 
 if lsusb | grep -qE "(2621:2201|2621:4501)" ; then
     echo -e "${RED}$0${NC} : The IWB is ${GREEN}PHASE 2" >> $LOG_FILE
-    handler_loop_p2
+    processor=$(lscpu | grep -E "Vendor ID")
+    if contains "$processor" "AMD"; then
+        echo -e "${RED}$0${NC} : The IWB has ${YEL}AMD ${NC}processor." >> $LOG_FILE
+        handler_loop_p2_amd
+    elif contains "$processor" "Intel"; then
+        echo -e "${RED}$0${NC} : The IWB has ${YEL}Intel ${NC}processor." >> $LOG_FILE
+        handler_loop_p2_intel
+    fi
 elif lsusb | grep -qE "(6615:0084|6615:0085|6615:0086|6615:0087|6615:0088|6615:0c20)" ; then
     echo -e "${RED}$0${NC} : The IWB is ${GREEN}PHASE 1" >> $LOG_FILE
     handler_loop_p1
