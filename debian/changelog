@@ -1,3 +1,9 @@
+eta-check-optictouch (0.1.4) unstable; urgency=medium
+
+  * Update handler for Phase2 IWBs with AMD processors
+
+ -- Yunusemre Şentürk <yunusemre.senturk@pardus.org.tr>  Tue, 09 Jan 2018 19:31:49 +0300
+
 eta-check-optictouch (0.1.3) unstable; urgency=medium
 
   * Hold 2 secs before creating pid in phase2 IWBs
