@@ -14,7 +14,7 @@ START=0
 SUCCESS=0
 FAIL=0
 
-AMD_USB_SOCKET=''
+USB_SOCKET=''
 
 if [ ! -f $LOG_FILE ]; then
     touch $LOG_FILE
@@ -90,12 +90,32 @@ handler_loop_p2_intel() {
         if contains "$line" "input:"; then
             if contains "$line" "Touchscreen"; then
                 echo -e "${RED}$0${NC} : Touchscreen detected in input tag" >> $LOG_FILE
+                last_column=$(echo "$line" | awk '{print $NF}')
+
+                OIFS="$IFS"
+                IFS='/'
+                read -a arr <<< "${last_column}"
+                IFS="$OIFS"
+
+                arraylength=${#arr[@]}
+
+                for (( i=0; i<${arraylength}; i++ )); do
+                    if contains "${arr[${i}]}" "usb"; then
+                    USB_SOCKET="${arr[${i}+1]}"
+                    fi
+                done
+
                 sleep 2
                 create_pid
             fi
         elif contains "$line" "optictouch:"; then
             if contains "$line" "fail"; then
                 echo -e "${RED}$0${NC} : fail detected in optictouch tag" >> $LOG_FILE
+                remove_pid
+            fi
+        elif contains "$line" "usb ${USB_SOCKET}"; then
+            if contains "$line" "USB disconnect"; then
+                echo -e "${RED}$0${NC} : USB disconnect  detected in optictouch tag" >> $LOG_FILE
                 remove_pid
             fi
         fi
@@ -119,14 +139,14 @@ handler_loop_p2_amd() {
 
                 for (( i=0; i<${arraylength}; i++ )); do
                     if contains "${arr[${i}]}" "usb"; then
-                    AMD_USB_SOCKET="${arr[${i}+1]}"
+                    USB_SOCKET="${arr[${i}+1]}"
                     fi
                 done
 
                 sleep 2
                 create_pid
             fi
-        elif contains "$line" "usb ${AMD_USB_SOCKET}"; then
+        elif contains "$line" "usb ${USB_SOCKET}"; then
             if contains "$line" "USB disconnect"; then
                 echo -e "${RED}$0${NC} : USB disconnect  detected in optictouch tag" >> $LOG_FILE
                 remove_pid
@@ -152,4 +172,3 @@ elif lsusb | grep -qE "(6615:0084|6615:0085|6615:0086|6615:0087|6615:0088|6615:0
 else
     create_pid
 fi
-
