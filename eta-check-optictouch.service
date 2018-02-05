@@ -6,7 +6,7 @@ Before=kdm.service
 Type=simple
 User=root
 ExecStart=/usr/bin/eta-optictouch-handler
-Restart=on-abort
+Restart=always
 
 [Install]
 WantedBy=multi-user.target
