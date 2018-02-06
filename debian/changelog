@@ -1,3 +1,10 @@
+eta-check-optictouch (0.1.5) unstable; urgency=medium
+
+  * Update intel decision tree loop
+  * Fix service restart parameter
+
+ -- Yunusemre Şentürk <yunusemre.senturk@pardus.org.tr>  Tue, 06 Feb 2018 09:55:07 +0300
+
 eta-check-optictouch (0.1.4) unstable; urgency=medium
 
   * Update handler for Phase2 IWBs with AMD processors
