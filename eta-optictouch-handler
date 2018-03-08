@@ -81,7 +81,7 @@ handler_loop_p1() {
                 create_pid
             fi
         fi
-    done < <(tail -100f /var/log/kern.log)
+    done < <(tail -F -n 100 /var/log/kern.log)
 }
 
 handler_loop_p2_intel() {
@@ -119,7 +119,7 @@ handler_loop_p2_intel() {
                 remove_pid
             fi
         fi
-    done < <(tail -100f /var/log/kern.log)
+    done < <(tail -F -n 100 /var/log/kern.log)
 }
 
 handler_loop_p2_amd() {
@@ -152,7 +152,7 @@ handler_loop_p2_amd() {
                 remove_pid
             fi
         fi
-    done < <(tail -100f /var/log/kern.log)
+    done < <(tail -F -n 100 /var/log/kern.log)
 }
 
 
