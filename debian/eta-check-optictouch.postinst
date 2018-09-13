@@ -4,3 +4,5 @@ set -e
 
 systemctl enable eta-check-optictouch.service
 systemctl start eta-check-optictouch.service
+
+#DEBHELPER#
