@@ -1,10 +1,16 @@
-eta-check-optictouch (0.1.8) unstable; urgency=medium
+eta-check-optictouch (0.1.9) stable; urgency=medium
+
+  * Add systemd to Pre-Depends section
+
+ -- Yunusemre Şentürk <yunusemre.senturk@pardus.org.tr>  Thu, 13 Sep 2018 13:56:23 +0300
+
+eta-check-optictouch (0.1.8) stable; urgency=medium
 
   * Update maintainer scripts
 
  -- Yunusemre Şentürk <yunusemre.senturk@pardus.org.tr>  Thu, 13 Sep 2018 13:48:49 +0300
 
-eta-check-optictouch (0.1.7) unstable; urgency=medium
+eta-check-optictouch (0.1.7) stable; urgency=medium
 
   * Pardus CI integration
   * Update control file
