@@ -2,7 +2,7 @@
 
 set -e
 
-systemctl stop eta-check-optictouch.service
-systemctl disable eta-check-optictouch.service
+#systemctl stop eta-check-optictouch.service
+#systemctl disable eta-check-optictouch.service
 
 #DEBHELPER#
