@@ -1,3 +1,9 @@
+eta-check-optictouch (0.1.10) stable; urgency=medium
+
+  * Change main color
+
+ -- Yunusemre Şentürk <yunusemre.senturk@pardus.org.tr>  Thu, 11 Oct 2018 16:24:38 +0300
+
 eta-check-optictouch (0.1.9) stable; urgency=medium
 
   * Add systemd to Pre-Depends section
