@@ -24,7 +24,6 @@ build:
       - apt-get update
       - dpkg -i /packages/$(basename $DRONE_REPO)/*.deb || apt-get install -f
       - dpkg -i /packages/$(basename $DRONE_REPO)/*.deb
-      - systemctl status eta-check-optictouch.service
       - echo "DONE"
 branches:
   - master

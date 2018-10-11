@@ -170,5 +170,6 @@ elif lsusb | grep -qE "(6615:0084|6615:0085|6615:0086|6615:0087|6615:0088|6615:0
     echo -e "${RED}$0${NC} : The IWB is ${GREEN}PHASE 1" >> $LOG_FILE
     handler_loop_p1
 else
+    echo -e "${RED}$0${NC} : No IWB touch unit detected" >> $LOG_FILE
     create_pid
 fi
