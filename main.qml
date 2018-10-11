@@ -53,7 +53,7 @@ ApplicationWindow {
     Rectangle {
         id: root
         anchors.fill: parent
-        color: "#34353a"
+        color: "#383838"
         property string sliceColorFirst : "#ff6c00"
         property string sliceColorSecond : "#ff6c00"
         property string baseColor : root.color
