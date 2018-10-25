@@ -81,7 +81,7 @@ handler_loop_p1() {
                 create_pid
             fi
         fi
-    done < <(tail -F -n 100 /var/log/kern.log)
+    done < <(tail -F -n 200 /var/log/kern.log)
 }
 
 handler_loop_p2_intel() {
@@ -119,7 +119,7 @@ handler_loop_p2_intel() {
                 remove_pid
             fi
         fi
-    done < <(tail -F -n 100 /var/log/kern.log)
+    done < <(tail -F -n 200 /var/log/kern.log)
 }
 
 handler_loop_p2_amd() {
@@ -152,24 +152,27 @@ handler_loop_p2_amd() {
                 remove_pid
             fi
         fi
-    done < <(tail -F -n 100 /var/log/kern.log)
+    done < <(tail -F -n 200 /var/log/kern.log)
 }
 
-
-if lsusb | grep -qE "(2621:2201|2621:4501)" ; then
-    echo -e "${RED}$0${NC} : The IWB is ${GREEN}PHASE 2" >> $LOG_FILE
-    processor=$(lscpu | grep -E "Vendor ID")
-    if contains "$processor" "AMD"; then
-        echo -e "${RED}$0${NC} : The IWB has ${YEL}AMD ${NC}processor." >> $LOG_FILE
-        handler_loop_p2_amd
-    elif contains "$processor" "Intel"; then
-        echo -e "${RED}$0${NC} : The IWB has ${YEL}Intel ${NC}processor." >> $LOG_FILE
-        handler_loop_p2_intel
+while true
+do
+    if lsusb | grep -qE "(2621:2201|2621:4501)" ; then
+        echo -e "${RED}$0${NC} : The IWB is ${GREEN}PHASE 2" >> $LOG_FILE
+        processor=$(lscpu | grep -E "Vendor ID")
+        if contains "$processor" "AMD"; then
+            echo -e "${RED}$0${NC} : The IWB has ${YEL}AMD ${NC}processor." >> $LOG_FILE
+            handler_loop_p2_amd
+        elif contains "$processor" "Intel"; then
+            echo -e "${RED}$0${NC} : The IWB has ${YEL}Intel ${NC}processor." >> $LOG_FILE
+            handler_loop_p2_intel
+        fi
+    elif lsusb | grep -qE "(6615:0084|6615:0085|6615:0086|6615:0087|6615:0088|6615:0c20)" ; then
+        echo -e "${RED}$0${NC} : The IWB is ${GREEN}PHASE 1" >> $LOG_FILE
+        handler_loop_p1
+    else
+        echo -e "${RED}$0${NC} : No IWB touch unit detected" >> $LOG_FILE
+        create_pid
+        break
     fi
-elif lsusb | grep -qE "(6615:0084|6615:0085|6615:0086|6615:0087|6615:0088|6615:0c20)" ; then
-    echo -e "${RED}$0${NC} : The IWB is ${GREEN}PHASE 1" >> $LOG_FILE
-    handler_loop_p1
-else
-    echo -e "${RED}$0${NC} : No IWB touch unit detected" >> $LOG_FILE
-    create_pid
-fi
+done
