@@ -1,3 +1,9 @@
+eta-check-optictouch (0.1.12) stable; urgency=medium
+
+  * make handler it self a loop
+
+ -- Yunusemre Şentürk <yunusemre.senturk@pardus.org.tr>  Thu, 25 Oct 2018 10:14:40 +0300
+
 eta-check-optictouch (0.1.11) stable; urgency=medium
 
   * Update rules file
