@@ -1,3 +1,10 @@
+eta-check-optictouch (0.1.13) stable; urgency=medium
+
+  * Update managing scripts
+  * Remove local-options since its native package
+
+ -- Yunusemre Şentürk <yunusemre.senturk@pardus.org.tr>  Thu, 15 Nov 2018 09:13:22 +0300
+
 eta-check-optictouch (0.1.12) stable; urgency=medium
 
   * make handler it self a loop
