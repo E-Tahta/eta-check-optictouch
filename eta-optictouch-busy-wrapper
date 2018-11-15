@@ -2,6 +2,8 @@
 
 #author : yunusem, hikmet
 
+now=$(date +%d-%m-%Y\ %T.%3N)
+
 RED='\033[1;31m'
 YEL='\033[1;33m'
 GREEN='\033[0;32m'
@@ -10,9 +12,14 @@ NC='\033[0m' # No Color
 LOG_FILE=/var/log/eta.log
 OPTICTOUCH_PID=/var/run/optictouch.pid
 
-echo -e "${YEL}$0" >> $LOG_FILE
-u=`/usr/bin/whoami`
-echo -e "${YEL}$0 ${NC}running as ${YEL}$u" >> $LOG_FILE
+print_output() {
+  now=$(date +%d-%m-%Y\ %T.%3N)
+  echo -e "$now $1" >> $LOG_FILE
+}
+
+print_output "${YEL}$0${NC}"
+u=$(/usr/bin/whoami)
+print_output "${YEL}$0${NC} : running as ${YEL}$u${NC}"
 
 FLAG="IDLE"
 
@@ -20,13 +27,13 @@ while true
 do
     if [ ! -f $OPTICTOUCH_PID ]; then
         if [ "$FLAG" == "IDLE" ]; then
-            echo -e "${YEL}$0${NC} : pid not found calling ${YEL}/usr/bin/eta-optictouch-busy &" >> $LOG_FILE
+            print_output "${YEL}$0${NC} : pid not found calling ${YEL}/usr/bin/eta-optictouch-busy &"
             /usr/bin/eta-optictouch-busy &
             FLAG="BUSY"
         fi
     else
         if [ "$FLAG" == "BUSY" ]; then
-            echo -e "${YEL}$0${NC} : pid found terminating every ${YEL}eta-optictouch-busy" >> $LOG_FILE
+            print_output "${YEL}$0${NC} : pid found terminating every ${YEL}eta-optictouch-busy"
             killall eta-optictouch-busy
             FLAG="IDLE"
         fi
