@@ -1,3 +1,9 @@
+eta-check-optictouch (0.1.14) stable; urgency=medium
+
+  * Deprecate source
+
+ -- Yunusemre Şentürk <yunusemre.senturk@pardus.org.tr>  Fri, 23 Nov 2018 15:53:46 +0300
+
 eta-check-optictouch (0.1.13) stable; urgency=medium
 
   * Update managing scripts
